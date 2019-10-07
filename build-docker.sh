@@ -31,8 +31,15 @@ do
 done
 
 # Ensure that the configuration file is an absolute path
-CONFIG_FILE=$(realpath -s "$CONFIG_FILE")
-
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    realpath() {
+    	[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+	}
+	REALPATH="realpath"
+else
+	REALPATH="realpath -s"
+fi
+CONFIG_FILE=$($REALPATH "$CONFIG_FILE")
 # Ensure that the confguration file is present
 if test -z "${CONFIG_FILE}"; then
 	echo "Configuration file need to be present in '${DIR}/config' or path passed as parameter"
