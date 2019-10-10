@@ -24,6 +24,11 @@ ChallengeResponseAuthentication no
 #KerberosTicketCleanup yes
 #KerberosGetAFSToken no
 
+# Restrict key exchange, cipher, and MAC algorithms
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
+
 # GSSAPI options
 #GSSAPIAuthentication no
 #GSSAPICleanupCredentials yes
@@ -41,32 +46,17 @@ ChallengeResponseAuthentication no
 # and ChallengeResponseAuthentication to 'no'.
 UsePAM yes
 
-#AllowAgentForwarding yes
-#AllowTcpForwarding yes
-#GatewayPorts no
 X11Forwarding no
-#X11DisplayOffset 10
 X11UseLocalhost no
-#PermitTTY yes
 PrintMotd no
-#PrintLastLog yes
-#TCPKeepAlive yes
-#PermitUserEnvironment no
-#Compression delayed
-#ClientAliveInterval 0
-#ClientAliveCountMax 3
-#UseDNS no
-#PidFile /var/run/sshd.pid
-#MaxStartups 10:30:100
-#PermitTunnel no
-#ChrootDirectory none
-#VersionAddendum none
 
 # no default banner path
-#Banner none
+Banner /etc/banner/ssh
 
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
 # override default of no subsystems
 Subsystem	sftp	/usr/lib/openssh/sftp-server
+
+
