@@ -31,22 +31,17 @@ do
 done
 
 # Ensure that the configuration file is an absolute path
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    realpath() {
-    	[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-	}
-	REALPATH="realpath"
-else
-	REALPATH="realpath -s"
+if test -x /usr/bin/realpath; then
+	CONFIG_FILE=$(realpath -s "$CONFIG_FILE" || realpath "$CONFIG_FILE")
 fi
-CONFIG_FILE=$($REALPATH "$CONFIG_FILE")
+
 # Ensure that the confguration file is present
 if test -z "${CONFIG_FILE}"; then
 	echo "Configuration file need to be present in '${DIR}/config' or path passed as parameter"
 	exit 1
 else
 	# shellcheck disable=SC1090
-	source "${CONFIG_FILE}"
+	source ${CONFIG_FILE}
 fi
 
 CONTAINER_NAME=${CONTAINER_NAME:-pigen_work}
